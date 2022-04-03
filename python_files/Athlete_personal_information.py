@@ -22,7 +22,7 @@ spark = SparkSession     .builder     .appName("PySpark App")     .config("spark
 # In[3]:
 
 
-w_m_game_df = spark.read.parquet("parquet_files/w_m_game.parquet").toPandas()
+w_m_game_df = spark.read.parquet("../parquet_files/w_m_game.parquet").toPandas()
 
 
 # In[4]:
