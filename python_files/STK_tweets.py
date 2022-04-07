@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[4]:
+
+from dvc.api import make_checkpoint
 
 
+# get the tweets using the twitter api
 import pandas as pd
 import requests
 import json
@@ -38,33 +40,19 @@ if response.status_code == 200:
         print("tweet_id: ", tweet['id'], "tweet_text: ", tweet['text'])
 
 
-# In[5]:
 
-
+# convert the tweets information into data frame
 stk_tweet = pd.DataFrame({'id':[tweet['id'] for tweet in tweets['data']], 'text':[tweet['text'] for tweet in tweets['data']]})
+make_checkpoint()
 
 
-# In[6]:
 
-
-stk_tweet
-
-
-# In[25]:
-
-
-get_ipython().system('pip install vaderSentiment')
-
-
-# In[ ]:
 
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer 
 
 
-# In[ ]:
-
-
+# doing the sentiment analysis
 analyzer = SentimentIntensityAnalyzer()
 list_all_score = []
 for t in stk_tweet['text']:
@@ -74,49 +62,44 @@ for t in stk_tweet['text']:
     list_all_score.append(vs)
 
 
-# In[ ]:
 
-
+# merge the sentiment data for each row
 stk_tweet = pd.concat([stk_tweet, pd.DataFrame({'neg':[i['neg'] for i in list_all_score],
              'neu':[i['neu'] for i in list_all_score],
              'pos':[i['pos'] for i in list_all_score],
              'compound':[i['compound'] for i in list_all_score]})], axis = 1)
+make_checkpoint()
 
 
-# In[ ]:
 
 
-stk_tweet
+import os
 
-
-# In[ ]:
 
 
 os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
 os.environ["SPARK_HOME"] = "/project/spark-3.2.1-bin-hadoop3.2"
 
 
-# In[ ]:
 
 
 from pyspark.sql import SparkSession
 spark = SparkSession     .builder     .appName("PySpark App")     .config("spark.jars", "postgresql-42.3.2.jar")     .getOrCreate()
 
 
-# In[ ]:
 
 
+# convert the data frame into spark data frame
 stk_tweet_df = spark.createDataFrame(stk_tweet)
 
 
-# In[ ]:
 
 
 stk_tweet_df.printSchema()
 
 
-# In[ ]:
 
 
-stk_tweet_df.write.parquet("parquet_files/stk_tweet.parquet", mode = 'overwrite')
-
+# convert the data frame into parquet format
+stk_tweet_df.write.parquet("/project/DataEngineering/parquet_files/stk_tweet.parquet", mode = 'overwrite')
+make_checkpoint()
