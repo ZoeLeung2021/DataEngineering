@@ -1,0 +1,22 @@
+schema: '2.0'
+stages:
+  game_results_checks:
+    cmd: python /project/DataEngineering/python_files/Game_results.py
+    outs:
+    - path: game_results.txt
+  Athlete_personal_information_checks:
+    cmd: python /project/DataEngineering/python_files/Athlete_personal_information.py
+    outs:
+    - path: Athlete_personal_information.txt
+  STK_tweets_checks:
+    cmd: python /project/DataEngineering/python_files/STK_tweets.py
+    outs:
+    - path: STK_tweets.txt
+  data_transformation_checks:
+    cmd: python /project/DataEngineering/python_files/data_transformation.py
+    outs:
+    - path: data_transformation.txt
+  write_into_database_checks:
+    cmd: python /project/DataEngineering/python_files/write_into_database.py
+    outs:
+    - path: write_into_database.txt
