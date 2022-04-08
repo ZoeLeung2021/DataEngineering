@@ -3,8 +3,6 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "3.74.2"
-      AWS_ACCESS_KEY_ID="AKIA2OP3ZORY6KJRDWMK" 
-      AWS_SECRET_ACCESS_KEY="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"
     }
     random = {
       source  = "hashicorp/random"
