@@ -7,6 +7,10 @@ from dvc.api import make_checkpoint
 import os
 
 
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
+os.environ["SPARK_HOME"] = "/project/spark-3.2.1-bin-hadoop3.2"
+
+
 
 from pyspark.sql import SparkSession
 spark = SparkSession     .builder     .appName("PySpark App")     .config("spark.jars", "postgresql-42.3.2.jar")     .getOrCreate()
@@ -29,6 +33,7 @@ relay_sfnl = spark.read.parquet("/project/DataEngineering/parquet_files/relay_sf
 relay_fnl = spark.read.parquet("/project/DataEngineering/parquet_files/relay_fnl.parquet")
 countries = spark.read.parquet("/project/DataEngineering/parquet_files/countries.parquet")
 athlete = spark.read.parquet("/project/DataEngineering/parquet_files/athlete.parquet")
+stk_tweet = spark.read.parquet("/project/DataEngineering/parquet_files/stk_tweet.parquet")
 make_checkpoint()
 
 
@@ -58,5 +63,7 @@ make_checkpoint()
 relay_sfnl.write.jdbc(url=postgres_uri, table="shorttrack.relay_sfnl", mode="append", properties={"user":user, "password": password, "driver": "org.postgresql.Driver" })
 make_checkpoint()
 relay_fnl.write.jdbc(url=postgres_uri, table="shorttrack.relay_fnl", mode="append", properties={"user":user, "password": password, "driver": "org.postgresql.Driver" })
+make_checkpoint()
+stk_tweet.write.jdbc(url=postgres_uri, table="shorttrack.tweets", mode="append", properties={"user":user, "password": password, "driver": "org.postgresql.Driver" })
 make_checkpoint()
 

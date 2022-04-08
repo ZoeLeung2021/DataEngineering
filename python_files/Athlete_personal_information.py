@@ -13,6 +13,10 @@ import os
 from dvc.api import make_checkpoint
 
 
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
+os.environ["SPARK_HOME"] = "/project/spark-3.2.1-bin-hadoop3.2"
+
+
 
 # import pyspark 
 from pyspark.sql import SparkSession
