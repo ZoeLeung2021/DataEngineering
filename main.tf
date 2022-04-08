@@ -12,7 +12,7 @@ terraform {
   required_version = ">= 1.1.0"
 
   cloud {
-    organization = "ucl-data_engineering"
+    organization = "ucl-data-engineering"
 
     workspaces {
       name = "data-engineering-2022"
